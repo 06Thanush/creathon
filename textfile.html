@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OSINT Duplicate Account Checker</title>
+
+<style>
+/* ---------- GLOBAL PAGE DESIGN ---------- */
+body {
+    font-family: 'Courier New', monospace;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom right, #330000, #4d0000, #660000);
+    color: #ffbbbb;
+}
+
+/* ---------- TITLE ---------- */
+h1 {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 36px;
+    text-shadow: 0 0 10px #aa2222, 0 0 15px #ff4444;
+}
+
+/* ---------- MAIN CONTAINER ---------- */
+.container {
+    max-width: 650px;
+    margin: 40px auto;
+    background: rgba(255, 0, 0, 0.1); /* dim red */
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 25px #aa2222aa;
+}
+
+/* ---------- LABEL ---------- */
+label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ff6666;
+}
+
+/* ---------- INPUT ---------- */
+input {
+    width: 100%;
+    padding: 14px;
+    margin-top: 12px;
+    border-radius: 10px;
+    border: none;
+    font-size: 17px;
+    outline: none;
+    background: rgba(255, 100, 100, 0.2);
+    color: #fff;
+}
+
+/* ---------- BUTTON ---------- */
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff0000, #cc0000);
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+    box-shadow: 0 4px 12px #ff4444;
+}
+button:hover {
+    background: linear-gradient(135deg, #cc0000, #990000);
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+/* ---------- RESULTS ---------- */
+.result {
+    margin-top: 30px;
+    font-size: 18px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #aa2222aa;
+    background: rgba(255, 0, 0, 0.05); /* dim red */
+}
+
+/* Dangerous & Safe results */
+.danger {
+    background: rgba(255, 0, 0, 0.2);
+    color: #ff4444;
+    border-left: 5px solid #ff0000;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+}
+.safe {
+    background: rgba(0, 150, 0, 0.2);
+    color: #44ff77;
+    border-left: 5px solid #00cc44;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+}
+
+.result a {
+    display: block;
+    margin-top: 12px;
+    color: inherit;
+    font-weight: bold;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+.result a:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- BACK BUTTON ---------- */
+.back-btn {
+    display: block;
+    width: 220px;
+    padding: 14px;
+    margin: 30px auto 0 auto;
+    background: #bb3333;
+    text-align: center;
+    border-radius: 12px;
+    color: white;
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+    box-shadow: 0 4px 12px #aa2222;
+}
+.back-btn:hover {
+    background: #cc4444;
+    transform: scale(1.05);
+}
+</style>
+</head>
+
+<body>
+
+<h1>💀 OSINT Duplicate Account Checker</h1>
+
+<div class="container">
+    <label>Enter Username:</label>
+    <input type="text" id="username" placeholder="Enter profile username">
+
+    <button onclick="checkAccounts()">Check Across Platforms</button>
+
+    <div id="results" class="result">Waiting for input...</div>
+
+    <a href="main.html" class="back-btn">⬅ Back to Main Page</a>
+</div>
+
+<script>
+function checkAccounts() {
+    const username = document.getElementById("username").value.trim();
+    const results = document.getElementById("results");
+
+    if (username === "") {
+        results.innerHTML = "<p class='danger'>⚠️ Please enter a username.</p>";
+        return;
+    }
+
+    const platforms = [
+        {name: "Instagram", url: "https://www.instagram.com/"},
+        {name: "Facebook", url: "https://www.facebook.com/"},
+        {name: "Twitter (X)", url: "https://twitter.com/"},
+        {name: "GitHub", url: "https://github.com/"},
+        {name: "TikTok", url: "https://www.tiktok.com/@"},
+        {name: "Reddit", url: "https://www.reddit.com/user/"},
+        {name: "LinkedIn", url: "https://www.linkedin.com/in/"},
+        {name: "Pinterest", url: "https://www.pinterest.com/"},
+        {name: "Snapchat", url: "https://www.snapchat.com/add/"}
+    ];
+
+    results.innerHTML = "<b>🔗 Click links below to verify accounts:</b><br><br>";
+
+    // Determine if username is suspicious
+    const suspiciousPatterns = /[0-9]{3,}|__|test|fake|bot/i;
+
+    platforms.forEach(p => {
+        const link = p.url + username;
+        const isDanger = suspiciousPatterns.test(username);
+        const cls = isDanger ? "danger" : "safe";
+        results.innerHTML += `<div class="${cls}"><a href="${link}" target="_blank">${p.name}: ${link}</a></div>`;
+    });
+}
+</script>
+
+</body>
+</html>

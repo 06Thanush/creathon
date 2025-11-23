@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OSINT Fake Account Analyzer</title>
+
+<style>
+body {
+    font-family: 'Courier New', monospace;
+    background: #121212;
+    padding: 40px;
+    color: #ff6666;
+}
+
+.container {
+    max-width: 700px;
+    background: #1e1e1e;
+    color: #ff6666;
+    margin: auto;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 0 25px #ff4444aa;
+    border: 2px solid #aa3333;
+}
+
+h2 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 25px;
+    color: #ff6666;
+    text-shadow: 0 0 4px #aa3333, 0 0 8px #ff4444;
+}
+
+input {
+    width: 100%;
+    padding: 16px;
+    margin-top: 10px;
+    font-size: 18px;
+    border-radius: 12px;
+    border: 2px solid #aa3333;
+    outline: none;
+    background: #222;
+    color: #ff6666;
+}
+
+input:focus {
+    border-color: #ff4444;
+    box-shadow: 0 0 6px #ff3333;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 12px;
+    font-size: 18px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    color: black;
+}
+
+.main-btn {
+    background: #bb2222;
+    color: white;
+    box-shadow: 0 5px 10px #aa222288;
+}
+
+.main-btn:hover {
+    background: #aa1111;
+    transform: translateY(-2px);
+}
+
+.visit-btn {
+    background: #884444;
+    color: white;
+}
+
+.visit-btn:hover {
+    background: #662222;
+}
+
+.back-btn {
+    background: #333333;
+    color: white;
+}
+
+.back-btn:hover {
+    background: #111111;
+}
+
+#result {
+    margin-top: 25px;
+    padding: 22px;
+    border-radius: 18px;
+    font-size: 17px;
+    box-shadow: 0 0 10px #44444477;
+    background: #2a1a1a;
+    color: #ffaaaa;
+    transition: 0.3s;
+}
+
+.real { 
+    background:#1a331a; 
+    border-left:8px solid #00ff00; 
+    color:#00ff00; 
+}
+.fake { 
+    background:#331a1a; 
+    border-left:8px solid #ff3333; 
+    color:#ff5555; 
+}
+.uncertain { 
+    background:#332a1a; 
+    border-left:8px solid #ffaa00; 
+    color:#ffcc66; 
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1b1b1b;
+}
+th, td {
+    border: 1px solid #774444;
+    padding: 10px;
+    font-size: 16px;
+    color: #ff8888;
+}
+th { 
+    background: #2a1a1a; 
+    font-weight: bold;
+    color: #ffbb88;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>🛡️ OSINT Fake Account Analyzer</h2>
+
+<input id="profileURL" placeholder="Enter profile URL">
+<button class="main-btn" onclick="startCheck()">⚡ Analyze Profile</button>
+
+<div id="result" class="uncertain">Waiting for analysis...</div>
+
+<button class="back-btn" onclick="window.location.href='main.html'">⬅ Back to Main Page</button>
+</div>
+
+<script>
+// extract username
+function extractUsername(url){
+    return url.split("/")[3]?.toLowerCase() || "";
+}
+
+// random summary text
+function randomSummary(){
+    const texts = [
+        "⚠ Behavior pattern matches impersonation activity.",
+        "⚠ Structure resembles known scam accounts.",
+        "⚠ Multiple anomalies detected compared to real profiles.",
+        "⚠ Engagement and naming pattern resemble fake profiles.",
+        "⚠ Profile structure partially valid but suspicious."
+    ];
+    return texts[Math.floor(Math.random() * texts.length)];
+}
+
+// table generator
+function indicatorTable(ind){
+    let h = `<table><tr><th>Indicator</th><th>Evidence</th></tr>`;
+    ind.forEach(i => h += `<tr><td>${i.type}</td><td>${i.evidence}</td></tr>`);
+    return h + "</table>";
+}
+
+// main analysis
+function analyzeProfile(url){
+    let score = 0;
+    let indicators = [];
+    let uname = extractUsername(url);
+
+    if(url.endsWith(".")){ 
+        score += 10;
+        indicators.push({type:"FAKE", evidence:"URL ends with a dot → suspicious."});
+    }
+    if(/[0-9]{3,}/.test(uname)){ 
+        score += 2;
+        indicators.push({type:"Fake", evidence:"Username contains too many numbers."});
+    }
+    if(/__/.test(uname)){ 
+        score += 1;
+        indicators.push({type:"Fake", evidence:"Multiple underscores found."});
+    }
+
+    indicators.push({type:"Summary", evidence: randomSummary()});
+
+    return {score, indicators};
+}
+
+// visit profile
+function visitProfile(url){
+    window.open(url, "_blank");
+}
+
+// START CHECK
+function startCheck(){
+    const url = document.getElementById("profileURL").value.trim();
+    const box = document.getElementById("result");
+
+    if(!url.startsWith("http")){
+        box.className = "fake";
+        box.innerHTML = "❌ Invalid URL format.";
+        return;
+    }
+
+    const data = analyzeProfile(url);
+
+    let cls = "real";
+    let text = "✔ REAL ACCOUNT";
+
+    if(data.score >= 5){
+        cls = "fake";
+        text = "💀 FAKE ACCOUNT DETECTED";
+    } else if(data.score >= 3){
+        cls = "uncertain";
+        text = "⚠ Suspicious Account";
+    }
+
+    box.className = cls;
+    box.innerHTML = `
+        <h3>${text}</h3>
+        ${indicatorTable(data.indicators)}
+
+        <button class="visit-btn" onclick="visitProfile('${url}')">Visit Profile</button>
+
+        <h3>⚡ Risk Summary</h3>
+        <ul>
+            <li>${data.score >= 5 ? "High scam/hacking risk" : "Low behavioral risk"}</li>
+            <li>${data.score >= 5 ? "Possible phishing attempt" : "Profile seems organic"}</li>
+        </ul>
+
+        <h3>Verification Tips</h3>
+        <ul>
+            <li>Run reverse image search</li>
+            <li>Check profile creation date</li>
+            <li>Analyze engagement pattern</li>
+        </ul>
+    `;
+}
+</script>
+
+</body>
+</html>

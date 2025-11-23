@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>OSINT Reverse Image Fake Account Analyzer</title>
+
+<style>
+/* ----------- GLOBAL PAGE STYLE ----------- */
+body {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(135deg, #200000, #400000, #600000);
+    color: #ff8888;
+    padding: 25px;
+}
+
+/* ----------- TITLE ----------- */
+h1 {
+    text-align: center;
+    color: #ff6666;
+    font-size: 38px;
+    text-shadow: 0 0 8px #ff0000, 0 0 15px #ff4444;
+}
+
+/* ----------- MAIN CONTAINER ----------- */
+.container {
+    background: rgba(70,0,0,0.5);
+    backdrop-filter: blur(6px);
+    padding: 35px;
+    border-radius: 20px;
+    max-width: 900px;
+    margin: auto;
+    box-shadow: 0 0 25px #ff000088;
+    border: 2px solid #aa3333;
+}
+
+/* ----------- INPUT & BUTTONS ----------- */
+input, button {
+    width: 100%;
+    padding: 16px;
+    margin-top: 15px;
+    border-radius: 12px;
+    border: 2px solid #aa3333;
+    font-size: 18px;
+}
+
+input {
+    background: rgba(100,0,0,0.3);
+    color: #ffaaaa;
+}
+
+input:hover {
+    border-color: #ff5555;
+    box-shadow: 0 0 6px #ff3333;
+}
+
+/* Action Button */
+button {
+    background: linear-gradient(135deg, #cc4444, #aa2222);
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    box-shadow: 0 3px 10px #aa2222aa;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #ff6666, #cc0000);
+    transform: scale(1.03);
+}
+
+/* ----------- RESULT BOX ----------- */
+.section {
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 25px;
+    box-shadow: 0 0 12px #ff000055;
+    transition: 0.3s;
+    color: #fff;
+    font-size: 16px;
+}
+
+/* --- Color-coded result boxes --- */
+.safe { 
+    background: #224422; 
+    border-left: 8px solid #00ff44; 
+    color: #aaffaa; 
+}
+.danger { 
+    background: #442222; 
+    border-left: 8px solid #ff4444; 
+    color: #ff9999; 
+}
+
+/* ----------- Back / Home Buttons ----------- */
+.back-btn, .home-btn {
+    margin-top: 15px;
+    background: #882222;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 12px;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s;
+}
+.back-btn:hover, .home-btn:hover {
+    background: #ff3333;
+    transform: scale(1.03);
+}
+</style>
+
+</head>
+<body>
+
+<h1>💀 OSINT Reverse Image Fake Account Analyzer</h1>
+
+<div class="container">
+
+    <h2 style="color:#ff9999; text-align:center;">Upload Photo for Analysis</h2>
+    <input type="file" id="imageFile" accept="image/*">
+    <button onclick="analyzeImage()">⚠ Analyze Image</button>
+
+    <!-- Default message -->
+    <div id="result" class="section safe">Waiting for image analysis...</div>
+</div>
+
+<script>
+// Reverse Image Analyzer (Simulated OSINT System)
+function analyzeImage(){
+    const file = document.getElementById("imageFile").files[0];
+    if(!file){
+        alert("Please upload an image first!");
+        return;
+    }
+
+    let resultBox = document.getElementById("result");
+
+    // Simulated OSINT detection patterns
+    let fakePatterns = ["IMG0001", "stock", "ai", "edit", "fake", "stolen"];
+    let isDanger = fakePatterns.some(p => file.name.toLowerCase().includes(p));
+
+    // Choose class based on danger
+    let boxClass = isDanger ? "danger section" : "safe section";
+
+    let message = `
+        <h3>🔎 Reverse Image Search Results</h3>
+        <ul>
+            <li>${isDanger ? "⚠️ Matches found in fake/stolen OSINT databases" : "✔ No matches found — image appears safe"}</li>
+            <li>${file.size < 15000 ? "⚠️ Very low resolution — could be fake" : "✔ Resolution appears normal"}</li>
+            <li>${file.type.includes("jpg") || file.type.includes("jpeg") ? "✔ Metadata likely present" : "⚠ No metadata — check carefully"}</li>
+        </ul>
+
+        <h3>📌 Risk Interpretation</h3>
+        <ul>
+            <li>${isDanger ? "🚨 HIGH risk of impersonation / fake profile" : "🟢 LOW risk — looks authentic"}</li>
+            <li>${file.size < 15000 ? "Image may be AI-generated or stolen" : "Looks like a real user photo"}</li>
+        </ul>
+
+        <h3>✔ Verification Tips</h3>
+        <ul>
+            <li>Run image on Google Reverse Image Search</li>
+            <li>Check if same face appears on multiple accounts</li>
+            <li>Request real-time selfie/video verification</li>
+            <li>Inspect background for AI distortions</li>
+        </ul>
+
+        <button class="back-btn" onclick="resetPage()">🔄 Analyze Another Image</button>
+        <button class="home-btn" onclick="goHome()">🏠 Back to Home Page</button>
+    `;
+
+    resultBox.className = boxClass;
+    resultBox.innerHTML = message;
+}
+
+function resetPage(){
+    location.reload();
+}
+
+// Go back to home page
+function goHome(){
+    window.location.href = "main.html";  // Change if your main file is named differently
+}
+</script>
+
+</body>
+</html>

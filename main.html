@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Social Media Authenticity & AI Assistant</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { 
+    font-family:'Courier New', monospace; 
+    background: linear-gradient(135deg,#2a0000,#4d0000,#660000); 
+    color:#ff9999; 
+}
+
+/* ---------- HEADER ---------- */
+header { 
+    text-align:center; 
+    padding:40px 20px; 
+    font-size:32px; 
+    font-weight:600; 
+    color:#ff6666; 
+    text-shadow:0 0 6px #aa2222,0 0 12px #ff4444; 
+}
+
+/* ---------- CARD CONTAINER ---------- */
+.container { 
+    display:grid; 
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); 
+    gap:20px; 
+    padding:30px; 
+    max-width:1200px; 
+    margin:auto; 
+}
+
+/* ---------- CARD STYLE ---------- */
+.card { 
+    background:rgba(80,0,0,0.5); 
+    padding:20px; 
+    border-radius:15px; 
+    backdrop-filter:blur(8px); 
+    transition:0.3s; 
+    box-shadow:0 0 15px #aa2222aa;
+}
+.card:hover { 
+    transform:translateY(-5px); 
+    background:rgba(120,0,0,0.6); 
+}
+.card h2 { 
+    font-size:20px; 
+    margin-bottom:10px; 
+    color:#ff9999; 
+}
+.card p { 
+    line-height:1.5; 
+    color:#ffbbbb;
+}
+.card a, .card button { 
+    display:inline-block; 
+    margin-top:10px; 
+    padding:8px 12px; 
+    background:#bb3333; 
+    color:#222; 
+    border-radius:6px; 
+    font-weight:600; 
+    cursor:pointer; 
+    text-decoration:none;
+}
+.card a:hover, .card button:hover { 
+    background:#cc4444; 
+    color:white;
+}
+
+/* ---------- AI ICON ---------- */
+#aiIcon { 
+    position:fixed; 
+    bottom:20px; 
+    right:20px; 
+    width:55px; 
+    height:55px; 
+    background:#bb3333; 
+    border-radius:50%; 
+    display:flex; 
+    align-items:center; 
+    justify-content:center; 
+    font-weight:bold; 
+    color:black; 
+    cursor:pointer; 
+    box-shadow:0 0 12px #aa2222aa; 
+    z-index:1000; 
+}
+#aiIcon:hover { 
+    transform: scale(1.1); 
+    transition:0.3s; 
+    background:#cc4444;
+}
+</style>
+</head>
+<body>
+
+<header>💀 Social Media Authenticity & AI Assistant</header>
+
+<div class="container" id="homePage">
+    <div class="card">
+        <h2>Check Profile Authenticity</h2>
+        <p>Analyze whether a social media profile is genuine or fake.</p>
+        <button onclick="window.location.href='profile.html'">Go</button>
+    </div>
+    <div class="card">
+        <h2>Signs of Impersonation</h2>
+        <p>Learn the most common signs that an account is pretending to be someone else.</p>
+        <button onclick="window.location.href='sign.html'">Go</button>
+    </div>
+    <div class="card">
+        <h2>Reverse Image Search</h2>
+        <p>Check if a profile picture is stolen or belongs to multiple accounts.</p>
+        <button onclick="window.location.href='revers.html'">Go</button>
+    </div>
+    <div class="card">
+        <h2>Metadata from Posts</h2>
+        <p>Analyze metadata from posts to detect manipulation or inconsistencies.</p>
+        <button onclick="window.location.href='metadata.html'">Go</button>
+    </div>
+    <div class="card">
+        <h2>Duplicate Accounts</h2>
+        <p>Find whether the same name or photos appear on multiple suspicious accounts.</p>
+        <button onclick="window.location.href='textfile.html'">Go</button>
+    </div>
+    <div class="card">
+        <h2>Possible Motives</h2>
+        <p>Understand why fake accounts are created: scams, impersonation, hacking, catfishing.</p>
+        <button onclick="window.location.href='posibel.html'">Go</button>
+    </div>
+</div>
+
+<!-- AI ICON -->
+<div id="aiIcon" onclick="goToAI()">AI</div>
+
+<script>
+// Clicking AI icon redirects to VAPI AI in a new tab
+function goToAI() {
+    window.open("https://vapi.ai?demo=true&shareKey=bb097bba-1612-4d57-b710-a99fe6c996e2&assistantId=e1d27eb9-8706-4deb-9feb-a9f2aa87fb72", "_blank");
+}
+</script>
+
+</body>
+</html>
